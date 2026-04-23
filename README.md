@@ -39,6 +39,23 @@ Then, on your web browser, access http://localhost:5173.
 
 > **Note:** The first time you load the app it will download a ~600MB ONNX model in the background. Cached data is used for the initial examples so the UI is immediately interactive.
 
+### Docker (easiest — self-contained, no Node/npm needed)
+
+A pre-built image is available on Docker Hub. It includes the ONNX model and tokenizer, so it works fully offline after the initial pull:
+
+```bash
+docker run -d --name transformer-explainer -p 8080:80 lqdflying/transformer-explainer:latest
+```
+
+Then open http://localhost:8080 in your browser.
+
+To build locally:
+
+```bash
+docker build -t transformer-explainer .
+docker run -d --name transformer-explainer -p 8080:80 transformer-explainer
+```
+
 ## Credits
 
 Transformer Explainer was created by <a href="https://aereeeee.github.io/" target="_blank">Aeree Cho</a>, <a href="https://www.linkedin.com/in/chaeyeonggracekim/" target="_blank">Grace C. Kim</a>, <a href="https://alexkarpekov.com/" target="_blank">Alexander Karpekov</a>, <a href="https://alechelbling.com/" target="_blank">Alec Helbling</a>, <a href="https://zijie.wang/" target="_blank">Jay Wang</a>, <a href="https://seongmin.xyz/" target="_blank">Seongmin Lee</a>, <a href="https://bhoov.com/" target="_blank">Benjamin Hoover</a>, and <a href="https://poloclub.github.io/polochau/" target="_blank">Polo Chau</a> at the Georgia Institute of Technology.
