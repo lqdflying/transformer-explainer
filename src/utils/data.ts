@@ -31,14 +31,19 @@ export const fakeRunWithCachedData = async ({
 	tokenIds.set(cachedData.tokenIds);
 
 	setTimeout(async () => {
-		await showFlowAnimation(cachedData.tokens.length, true);
-		adjustTemperature({
-			tokenizer,
-			logits: cachedData.logits,
-			temperature,
-			sampling
-		});
-		isModelRunning.set(false);
+		try {
+			await showFlowAnimation(cachedData.tokens.length, true);
+			adjustTemperature({
+				tokenizer,
+				logits: cachedData.logits,
+				temperature,
+				sampling
+			});
+		} catch (e) {
+			console.error('fakeRunWithCachedData animation failed:', e);
+		} finally {
+			isModelRunning.set(false);
+		}
 	}, 0);
 };
 
@@ -73,16 +78,18 @@ export const runModel = async ({
 
 	// To ensure the animation starts after all elements have been rendered
 	setTimeout(async () => {
-		await showFlowAnimation(input_tokens.length, isOneTokenAdded);
-
-		predictedToken.set(sampled);
-		// setPredictedTokenForAnimation(probabilities, sampled, sampling);
-
-		isModelRunning.set(false);
+		try {
+			await showFlowAnimation(input_tokens.length, isOneTokenAdded);
+			predictedToken.set(sampled);
+		} catch (e) {
+			console.error('runModel animation failed:', e);
+		} finally {
+			isModelRunning.set(false);
+		}
 	}, 0);
 };
 
-const setPredictedTokenForAnimation = (probabilities, sampled, sampling) => {
+const setPredictedTokenForAnimation = (probabilities: Probabilities, sampled: Probability, sampling: Sampling) => {
 	let delay = 10;
 	let topK = probabilities.slice(0, sampling.value);
 	let animationTokens = [...topK, ...topK.slice(sampled.rank).reverse()];
@@ -147,11 +154,14 @@ export const getData = async (token_ids: number[]) => {
 		const outputs = targetTensors.reduce(
 			(obj, key) => {
 				const out = results[key];
+				if (!out) {
+					console.warn(`Missing output tensor: ${key}`);
+					return obj;
+				}
 				const processedData = {
-					// ...out,
-					data: reshapeArray([...out.cpuData], out.dims)
+					data: reshapeArray([...(out.data as number[])], out.dims)
 				};
-				obj[key] = processedData;
+				obj[key] = processedData as ModelData['outputs'][string];
 				return obj;
 			},
 			{} as ModelData['outputs']
@@ -162,7 +172,7 @@ export const getData = async (token_ids: number[]) => {
 			outputs
 		};
 	} catch (error) {
-		console.error('Error during inference:', error.message);
+		console.error('Error during inference:', (error as Error).message);
 		throw error;
 	}
 };

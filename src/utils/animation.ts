@@ -12,7 +12,7 @@ const getGradientStops = (className: string, stopIdx = 1) => {
 	);
 };
 const generateGradientAnimation = (
-	tl,
+	tl: GSAPTimeline,
 	gradStop: undefined | SVGStopElement | (SVGStopElement | undefined)[],
 	options: GSAPTweenVars = {}
 ) => {
@@ -28,8 +28,8 @@ const generateGradientAnimation = (
 	const { from = '0%', to = '100%' } = offset;
 
 	const initialColor = Array.isArray(gradStop)
-		? gradStop.map((d) => d.getAttribute('stop-color'))
-		: gradStop.getAttribute('stop-color');
+		? gradStop.map((d) => d?.getAttribute('stop-color') || '')
+		: gradStop?.getAttribute('stop-color') || '';
 
 	tl.fromTo(
 		gradStop,
@@ -82,7 +82,7 @@ export const showFlowAnimation = async (tokenLength: number, isNextTokenOnly = t
 			},
 			onComplete: () => {
 				isOnAnimation.set(false);
-				resolve();
+				resolve(void 0);
 			}
 		});
 		const duration = 0.02;
@@ -290,9 +290,9 @@ export const showFlowAnimation = async (tokenLength: number, isNextTokenOnly = t
 			const lastQueryPath = queryPaths[queryPaths.length - 1];
 
 			[lastKeyPath, lastQueryPath].forEach((path) => {
-				const length = path.getTotalLength();
-				path.style.strokeDasharray = length;
-				path.style.strokeDashoffset = length;
+				const length = (path as SVGPathElement).getTotalLength();
+				(path as SVGPathElement).style.strokeDasharray = `${length}`;
+				(path as SVGPathElement).style.strokeDashoffset = `${length}`;
 			});
 
 			tl.to(lastKeyPath, {
@@ -313,7 +313,7 @@ export const showFlowAnimation = async (tokenLength: number, isNextTokenOnly = t
 					'<'
 				)
 				.from(
-					attentionMatrix.querySelectorAll('svg circle.last'),
+					attentionMatrix!.querySelectorAll('svg circle.last'),
 					{
 						scale: 0,
 						transformOrigin: '50% 50%',
@@ -331,9 +331,9 @@ export const showFlowAnimation = async (tokenLength: number, isNextTokenOnly = t
 			const stagger = Number((QKDuration / tokenLength).toFixed(2));
 
 			[...keyPaths, ...queryPaths].forEach((path) => {
-				const length = path.getTotalLength();
-				path.style.strokeDasharray = length;
-				path.style.strokeDashoffset = length;
+				const length = (path as SVGPathElement).getTotalLength();
+				(path as SVGPathElement).style.strokeDasharray = `${length}`;
+				(path as SVGPathElement).style.strokeDashoffset = `${length}`;
 			});
 
 			tl.to(keyPaths, {
@@ -354,7 +354,7 @@ export const showFlowAnimation = async (tokenLength: number, isNextTokenOnly = t
 					'<'
 				)
 				.from(
-					attentionMatrix.querySelectorAll('svg circle'),
+					attentionMatrix!.querySelectorAll('svg circle'),
 					{
 						scale: 0,
 						transformOrigin: '50% 50%',

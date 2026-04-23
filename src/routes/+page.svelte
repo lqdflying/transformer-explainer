@@ -51,17 +51,35 @@
 	let appStartTime = Date.now();
 
 	// fetch model
-	onMount(async () => {
-		const gpt2Tokenizer = await AutoTokenizer.from_pretrained('Xenova/gpt2');
-		active = true;
+	onMount(() => {
+		let unsubscribe: (() => void) | undefined;
 
-		const unsubscribe = subscribeInputs(gpt2Tokenizer);
+		const init = async () => {
+			try {
+				const gpt2Tokenizer = await AutoTokenizer.from_pretrained('Xenova/gpt2');
+				unsubscribe = subscribeInputs(gpt2Tokenizer);
 
-		if (!$isMobile) {
-			await fetchModel();
-		}
+				if (!$isMobile) {
+					try {
+						await fetchModel();
+					} catch (e) {
+						console.error('Failed to fetch model:', e);
+					}
+				}
+				isFetchingModel.set(false);
+			} catch (e) {
+				console.error('Failed to initialize tokenizer:', e);
+				isFetchingModel.set(false);
+			} finally {
+				active = true;
+			}
+		};
 
-		return unsubscribe;
+		init();
+
+		return () => {
+			if (unsubscribe) unsubscribe();
+		};
 	});
 
 	// Fetch model onnx
@@ -87,8 +105,6 @@
 
 		modelSession.set(session);
 
-		isFetchingModel.set(false);
-
 		const loadTime = Date.now() - appStartTime;
 		window.dataLayer?.push({
 			event: `model-loaded`,
@@ -102,7 +118,7 @@
 	const cachedDataMap = [ex0, ex1, ex2, ex3, ex4];
 	const subscribeInputs = (tokenizer: PreTrainedTokenizer) => {
 		const runModelOrCache = () => {
-			if ($isFetchingModel || !$modelSession) {
+			if (!$modelSession) {
 				const cachedData = cachedDataMap[$selectedExampleIdx];
 
 				fakeRunWithCachedData({

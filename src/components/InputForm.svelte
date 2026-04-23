@@ -57,6 +57,7 @@
 	};
 
 	const handleSubmit = (e) => {
+		e.preventDefault();
 		// Complete any running animation before starting new generation
 		completeCurrentAnimation();
 
@@ -129,8 +130,7 @@
 
 	$: isLoading = $isFetchingModel || $isModelRunning;
 	$: disabled =
-		$isFetchingModel ||
-		// $isModelRunning ||
+		$isModelRunning ||
 		$expandedBlock.id !== null ||
 		!!$weightPopover;
 	$: selectDisabled = $isModelRunning || $expandedBlock.id !== null || !!$weightPopover;

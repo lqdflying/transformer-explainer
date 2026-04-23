@@ -1,7 +1,7 @@
 const CACHE_PREFIX = 'onnx-model-cache';
 const CACHE_NAME = `${CACHE_PREFIX}-v2`;
 
-async function fetchModelChunks(chunkUrls) {
+async function fetchModelChunks(chunkUrls: string[]) {
 	await clearOldCaches();
 
 	let hasCache = false;
@@ -23,7 +23,7 @@ async function fetchModelChunks(chunkUrls) {
 		} else {
 			hasCache = true;
 			// console.log(`Using cached version: ${url}`);
-			return cachedResponses[index].arrayBuffer();
+			return cachedResponses[index]!.arrayBuffer();
 		}
 	});
 
@@ -31,7 +31,7 @@ async function fetchModelChunks(chunkUrls) {
 	return { hasCache, modelBuffers };
 }
 
-export async function fetchAndMergeChunks(urls) {
+export async function fetchAndMergeChunks(urls: string[]) {
 	const { hasCache, modelBuffers: chunks } = await fetchModelChunks(urls);
 	const totalSize = chunks.reduce((acc, chunk) => acc + chunk.byteLength, 0);
 	const mergedArray = new Uint8Array(totalSize);

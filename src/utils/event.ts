@@ -1,6 +1,6 @@
 export const ga = (name: string, params?: any) => {
-	if (typeof gtag === 'undefined') return;
-	gtag('event', name, params);
+	if (typeof (globalThis as any).gtag === 'undefined') return;
+	(globalThis as any).gtag('event', name, params);
 };
 
 export function scrollToDiv(e: Event, goTo: string) {

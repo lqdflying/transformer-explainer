@@ -28,10 +28,16 @@ _Poster, IEEE VIS 2024._
 git clone https://github.com/poloclub/transformer-explainer.git
 cd transformer-explainer
 npm install
+
+# Download the GPT-2 tokenizer files locally (required — avoids CORS issues with HuggingFace)
+bash scripts/download-tokenizer.sh
+
 npm run dev
 ```
 
 Then, on your web browser, access http://localhost:5173.
+
+> **Note:** The first time you load the app it will download a ~600MB ONNX model in the background. Cached data is used for the initial examples so the UI is immediately interactive.
 
 ## Credits
 

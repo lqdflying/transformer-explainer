@@ -1,3 +1,9 @@
+interface Window {
+	dataLayer?: any[];
+}
+
+declare var gtag: (...args: any[]) => void;
+
 type Flow = {
 	type?: 'path' | 'node';
 	id: string;
@@ -50,7 +56,7 @@ type Probability = {
 type Probabilities = Probability[];
 type ModelData = {
 	logits: number[];
-	outputs: Record<string, { data: number[][]; dims: number[]; size: number }>;
+	outputs: Record<string, { data: number[][]; dims?: number[]; size?: number }>;
 	probabilities: Probabilities;
 	sampled: Probability;
 };
