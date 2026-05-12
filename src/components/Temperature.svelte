@@ -27,9 +27,9 @@
 		max={temperatureArray.length - 1}
 		step={1}
 		bind:value={temperatureIndex}
-		valueText={temperatureTemp}
+		valueText={String(temperatureTemp)}
 		onClick={() => {
-			textPages.find((page) => page.id === 'temperature')?.complete();
+			textPages.find((page) => page.id === 'temperature')?.complete?.();
 		}}
 	>
 		<div class="temperature-text flex items-center gap-[2px]">

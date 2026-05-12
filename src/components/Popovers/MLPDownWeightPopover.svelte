@@ -79,7 +79,7 @@
 	onDestroy(() => {
 		if (timeline) {
 			timeline.kill();
-			timeline = null;
+			timeline = null as any;
 		}
 	});
 
@@ -315,7 +315,7 @@
 		</div>
 		<div class="matrix flex flex-col items-center">
 			<div class="title flex items-center gap-1">
-				Expanded Embeddings <HelpPopover id="mlp-down-emgeddings" 
+				Expanded Embeddings <HelpPopover id="mlp-down-emgeddings"
 					>{`Expanded latent vectors through MLP expansion layer.`}</HelpPopover
 				>
 			</div>
@@ -339,7 +339,7 @@
 		</div>
 		<div class="matrix flex flex-col items-center">
 			<div class="title flex items-center gap-1">
-				Compression Weights <HelpPopover id="mlp-down-weights" 
+				Compression Weights <HelpPopover id="mlp-down-weights"
 					>{`Projects expanded latent vectors back to original space. \nParameters that learned in training, fixed in prediction.`}</HelpPopover
 				>
 			</div>
@@ -362,7 +362,7 @@
 		<div class="operator"><div class="symbol plus px-3">+</div></div>
 		<div class="matrix flex flex-col items-center">
 			<div class="title flex items-center gap-1">
-				Compression Bias <HelpPopover id="mlp-down-bias" 
+				Compression Bias <HelpPopover id="mlp-down-bias"
 					>{`Offsets added after compression. \nParameters that learned in training, fixed in prediction.`}</HelpPopover
 				>
 			</div>

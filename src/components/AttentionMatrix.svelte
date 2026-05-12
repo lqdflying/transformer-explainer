@@ -59,7 +59,7 @@
 
 	let isAttentionExpanded = false;
 
-	const blockId = getContext('block-id');
+	const blockId = getContext('block-id') as string;
 
 	// event handling
 
@@ -75,7 +75,7 @@
 	const onClickAttention = (e) => {
 		e.stopPropagation();
 		e.preventDefault();
-		textPages.find((page) => page.id === 'masked-self-attention')?.complete();
+		textPages.find((page) => page.id === 'masked-self-attention')?.complete?.();
 
 		if (!isAttentionExpanded) {
 			expandedBlock.set({ id: blockId });
@@ -90,9 +90,10 @@
 		}
 	}
 	onMount(() => {
-		document.querySelector('.main-section').addEventListener('click', handleOutsideClick);
+		const mainSection = document.querySelector('.main-section');
+		mainSection?.addEventListener('click', handleOutsideClick);
 		return () => {
-			document.querySelector('.main-section').removeEventListener('click', handleOutsideClick);
+			mainSection?.removeEventListener('click', handleOutsideClick);
 		};
 	});
 
@@ -101,7 +102,7 @@
 	let collapseTl = gsap.timeline();
 
 	// google analytics
-	let startTime = null;
+	let startTime: number | null = null;
 
 	const expandAttention = () => {
 		highlightAttentionPath();
@@ -115,9 +116,9 @@
 		const outPaths = document.querySelectorAll('div.sankey g.attention path.to-attention-out');
 
 		[...keyPaths, ...queryPaths].forEach((path) => {
-			const length = path.getTotalLength();
-			path.style.strokeDasharray = length;
-			path.style.strokeDashoffset = length;
+			const length = (path as SVGPathElement).getTotalLength();
+			(path as SVGPathElement).style.strokeDasharray = `${length}`;
+			(path as SVGPathElement).style.strokeDashoffset = `${length}`;
 		});
 
 		const QKDuration = 1.2;
@@ -239,7 +240,7 @@
 		window.dataLayer?.push({
 			event: 'visibility-show',
 			visible_name: 'attention-expansion',
-			start_time: startTime,
+			start_time: startTime ?? 0,
 			user_id: $userId
 		});
 	};
@@ -247,7 +248,7 @@
 	const collapseAttention = () => {
 		removeAttentionPathHighlight();
 		let endTime = performance.now();
-		let visibleDuration = endTime - startTime;
+		let visibleDuration = endTime - (startTime ?? 0);
 
 		window.dataLayer?.push({
 			event: 'visibility-hide',
@@ -282,17 +283,17 @@
 	};
 
 	// color scale
-	$: qkColorScaleDomain = d3.extent(queryKey.flat());
-	$: qkColorScale = (d, i) => {
+	$: qkColorScaleDomain = d3.extent(queryKey.flat()) as [number, number];
+	$: qkColorScale = (d: number, i?: number): string => {
 		return d3
 			.scaleLinear()
 			.domain(qkColorScaleDomain)
-			.range(['white', theme.colors['purple'][700]])(d);
+			.range(['white', theme.colors['purple'][700]] as any)(d) as string;
 	};
-	const maskedColorScale = (d, i) => {
-		return d3.scaleLinear().domain([-3, 3]).range(['white', theme.colors['purple'][700]])(d);
+	const maskedColorScale = (d: number, i?: number): string => {
+		return d3.scaleLinear().domain([-3, 3]).range(['white', theme.colors['purple'][700]] as any)(d) as string;
 	};
-	const softmaxColorScale = (d, i) => {
+	const softmaxColorScale = (d: number, i?: number) => {
 		return d3.interpolate('white', theme.colors['purple'][700])(d);
 	};
 

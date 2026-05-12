@@ -32,7 +32,7 @@ const generateGradientAnimation = (
 		: gradStop?.getAttribute('stop-color') || '';
 
 	tl.fromTo(
-		gradStop,
+		gradStop as gsap.TweenTarget,
 		{ attr: { offset: from, ['stop-color']: color } },
 		{
 			attr: {
@@ -43,19 +43,19 @@ const generateGradientAnimation = (
 			ease,
 			...restOptions
 		},
-		position
+		position as string
 	).to(
-		gradStop,
+		gradStop as gsap.TweenTarget,
 		{
 			attr: {
 				offset: to,
-				['stop-color']: (i) => (Array.isArray(gradStop) ? initialColor[i] : initialColor)
+				['stop-color']: (i: number) => (Array.isArray(gradStop) ? initialColor[i] : initialColor) as any
 			},
 			duration,
 			ease,
 			...restOptions
-		},
-		'-=50%'
+		} as gsap.TweenVars,
+		'-=50%' as string
 	);
 };
 
@@ -282,8 +282,8 @@ export const showFlowAnimation = async (tokenLength: number, isNextTokenOnly = t
 			const stagger = Number((QKDuration / tokenLength).toFixed(2));
 
 			[...keyPaths, ...queryPaths].forEach((path) => {
-				path.style.strokeDasharray = 0;
-				path.style.strokeDashoffset = 0;
+				(path as SVGPathElement).style.strokeDasharray = '0';
+				(path as SVGPathElement).style.strokeDashoffset = '0';
 			});
 
 			const lastKeyPath = keyPaths[keyPaths.length - 1];

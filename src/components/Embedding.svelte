@@ -15,6 +15,13 @@
 	import { tick, setContext, getContext, onMount } from 'svelte';
 	import VectorCanvas from './common/VectorCanvas.svelte';
 	import * as d3 from 'd3';
+	const embeddingColorScale = (d: number, i: number) => {
+		return d3
+			.scaleDiverging()
+			.domain([0, 0.5, 1])
+			.range([theme.colors['red'][400], 'white', theme.colors['blue'][400]] as any)(d);
+	};
+
 	import HelpPopover from './common/HelpPopover.svelte';
 	import tailwindConfig from '../../tailwind.config';
 	import resolveConfig from 'tailwindcss/resolveConfig';
@@ -31,7 +38,7 @@
 
 	setContext('block-id', 'embedding');
 
-	const blockId = getContext('block-id');
+	const blockId = getContext('block-id') as string;
 
 	let isEmbeddingExpanded = false;
 
@@ -54,7 +61,7 @@
 	const onClickEmbeddingTitle = (e) => {
 		e.stopPropagation();
 		e.preventDefault();
-		textPages.find((page) => page.id === 'embedding')?.complete();
+		textPages.find((page) => page.id === 'embedding')?.complete?.();
 
 		if (!isEmbeddingExpanded) {
 			expandedBlock.set({ id: blockId });
@@ -71,9 +78,10 @@
 		}
 	}
 	onMount(() => {
-		document.querySelector('.main-section').addEventListener('click', handleOutsideClick);
+		const mainSection = document.querySelector('.main-section');
+		mainSection?.addEventListener('click', handleOutsideClick);
 		return () => {
-			document.querySelector('.main-section').removeEventListener('click', handleOutsideClick);
+			mainSection?.removeEventListener('click', handleOutsideClick);
 		};
 	});
 
@@ -81,7 +89,7 @@
 	let containerState: any;
 
 	// google analytics
-	let startTime = null;
+	let startTime: number | null = null;
 
 	const expandEmbedding = async () => {
 		containerState = Flip.getState('.embedding .token-column');
@@ -108,14 +116,14 @@
 		window.dataLayer?.push({
 			event: 'visibility-show',
 			visible_name: 'embedding-expansion',
-			start_time: startTime,
+			start_time: startTime ?? 0,
 			user_id: $userId
 		});
 	};
 
 	const collapseEmbedding = async () => {
 		let endTime = performance.now();
-		let visibleDuration = endTime - startTime;
+		let visibleDuration = endTime - (startTime ?? 0);
 
 		window.dataLayer?.push({
 			event: 'visibility-hide',
@@ -257,12 +265,7 @@
 							<div class={`vector ${embeddingVectorColor}`}>
 								<VectorCanvas
 									active
-									colorScale={(d, i) => {
-										return d3
-											.scaleDiverging()
-											.domain([0, 0.5, 1])
-											.range([theme.colors['red'][400], 'white', theme.colors['blue'][400]])(d);
-									}}
+									colorScale={embeddingColorScale}
 								/>
 							</div>
 							<span class="index-val text-xs">

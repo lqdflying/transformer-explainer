@@ -142,7 +142,7 @@ export function syncWithTransformerBoundingHeight(selector: string) {
 	const height = getTransformerBoundingHeight();
 	const element = document.querySelector(selector) as HTMLElement;
 	if (element) {
-		element.style.height = height;
+		element.style.height = height ?? '';
 	}
 }
 
@@ -191,7 +191,7 @@ export function applyTransformerBoundingHeight(selectors: string[]) {
 	selectors.forEach((selector) => {
 		const element = document.querySelector(selector) as HTMLElement;
 		if (element) {
-			element.style.height = height;
+			element.style.height = height ?? '';
 		}
 	});
 }

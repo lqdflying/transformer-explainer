@@ -20,14 +20,14 @@
 	$: color =
 		typeof colorScale === 'function'
 			? colorScale
-			: d3.interpolate(theme.colors[colorKey][100], theme.colors[colorKey][400]);
+			: d3.interpolate((theme.colors as Record<string, any>)[colorKey][100], (theme.colors as Record<string, any>)[colorKey][400]);
 
 	function drawCanvas() {
 		const ctx = canvas.getContext('2d');
 		if (!ctx) return;
 
-		const width = canvas.parentElement.clientWidth;
-		const height = canvas.parentElement.clientHeight;
+		const width = canvas.parentElement?.clientWidth ?? 0;
+		const height = canvas.parentElement?.clientHeight ?? 0;
 
 		ctx.clearRect(0, 0, width, height);
 
@@ -51,7 +51,7 @@
 		};
 	});
 
-	$: if (data && canvas && color) {
+	$: if (data && canvas) {
 		drawCanvas();
 	}
 </script>

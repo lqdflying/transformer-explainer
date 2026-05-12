@@ -20,7 +20,9 @@
 		.map((col) => Array($tokens.length).fill(-Infinity));
 
 	// generate data
-	$: softmaxed = $modelData?.outputs?.[`block_${$blockIdx}_attn_head_${$attentionHeadIdx}_attn_dropout`]?.data || placeHolderData;
+	$: softmaxed =
+		$modelData?.outputs?.[`block_${$blockIdx}_attn_head_${$attentionHeadIdx}_attn_dropout`]?.data ||
+		placeHolderData;
 
 	const visibleDimension = 8;
 	$: tokenLen = $tokens.length;
@@ -72,7 +74,7 @@
 	onDestroy(() => {
 		if (timeline) {
 			timeline.kill();
-			timeline = null;
+			timeline = null as any;
 		}
 	});
 

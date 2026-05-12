@@ -89,7 +89,11 @@ export const runModel = async ({
 	}, 0);
 };
 
-const setPredictedTokenForAnimation = (probabilities: Probabilities, sampled: Probability, sampling: Sampling) => {
+const setPredictedTokenForAnimation = (
+	probabilities: Probabilities,
+	sampled: Probability,
+	sampling: Sampling
+) => {
 	let delay = 10;
 	let topK = probabilities.slice(0, sampling.value);
 	let animationTokens = [...topK, ...topK.slice(sampled.rank).reverse()];
@@ -148,7 +152,7 @@ export const getData = async (token_ids: number[]) => {
 		const results = await session.run(feeds);
 
 		// Extract the logits
-		const logits = results['linear_output'].data;
+		const logits = results['linear_output'].data as number[];
 
 		// Extract the dictionary values
 		const outputs = targetTensors.reduce(

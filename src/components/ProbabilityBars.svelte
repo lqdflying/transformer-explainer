@@ -13,7 +13,7 @@
 
 	const barHeight = 4;
 
-	let svgEl: HTMLOrSVGElement;
+	let svgEl: SVGSVGElement;
 
 	let percentPrecision = 2;
 
@@ -23,7 +23,7 @@
 	export let drawBars = () => {
 		const data = $modelData?.probabilities;
 
-		const svg = d3.select(svgEl);
+		const svg = d3.select(svgEl as Element);
 
 		let xScale = d3
 			.scaleLinear()

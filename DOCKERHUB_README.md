@@ -27,20 +27,21 @@ Open http://localhost:8080 in your browser.
 
 ## Ports
 
-| Container | Host | Usage |
-|-----------|------|-------|
-| 80 | 8080 | Web UI |
+| Container | Host | Usage  |
+| --------- | ---- | ------ |
+| 80        | 8080 | Web UI |
 
 Change host port if 8080 is busy:
+
 ```bash
 docker run -d --name transformer-explainer -p 3000:80 lqdflying/transformer-explainer:latest
 ```
 
 ## Environment Variables
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `BASE_PATH` | `""` | Base URL path (set to `/your-path` if serving under a subpath) |
+| Variable    | Default | Description                                                    |
+| ----------- | ------- | -------------------------------------------------------------- |
+| `BASE_PATH` | `""`    | Base URL path (set to `/your-path` if serving under a subpath) |
 
 ## Build from source
 

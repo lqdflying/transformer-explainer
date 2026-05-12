@@ -82,8 +82,8 @@
 		}
 	});
 
-	let container;
-	let heads = [];
+	let container: HTMLDivElement;
+	let heads: Element[] = [];
 	let disablePagination = false;
 
 	onMount(() => {
@@ -273,7 +273,7 @@
 	};
 
 	const onClickNext = () => {
-		textPages.find((page) => page.id === 'multi-head')?.complete();
+		textPages.find((page) => page.id === 'multi-head')?.complete?.();
 
 		$attentionHeadIdxTemp =
 			$attentionHeadIdxTemp < $modelMeta.attention_head_num - 1 ? $attentionHeadIdxTemp + 1 : 0;
@@ -286,7 +286,7 @@
 	};
 
 	const onClickPrev = () => {
-		textPages.find((page) => page.id === 'multi-head')?.complete();
+		textPages.find((page) => page.id === 'multi-head')?.complete?.();
 
 		$attentionHeadIdxTemp =
 			$attentionHeadIdxTemp > 0 ? $attentionHeadIdxTemp - 1 : $modelMeta.attention_head_num - 1;

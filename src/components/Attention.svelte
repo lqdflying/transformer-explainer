@@ -20,7 +20,7 @@
 	export let className: string | undefined = undefined;
 
 	setContext('block-id', 'attention');
-	const blockId = getContext('block-id');
+	const blockId = getContext('block-id') as string;
 	$: isAttentionExpanded = $expandedBlock.id === blockId;
 
 	const queryHeadVectorColor = 'bg-blue-300';

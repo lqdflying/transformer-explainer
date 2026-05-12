@@ -18,8 +18,8 @@
 	$: if (showTextCard) {
 		handlePageTransition($textbookCurrentPage, $textbookPreviousPage);
 	} else {
-		if ($textbookPreviousPage >= 0 && textPages[$textbookPreviousPage]?.out) {
-			textPages[$textbookPreviousPage].out();
+		if ($textbookPreviousPage >= 0 && textPages[$textbookPreviousPage]) {
+			textPages[$textbookPreviousPage].out?.();
 		}
 		textbookPreviousPage.set(-1);
 	}

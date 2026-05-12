@@ -30,7 +30,7 @@
 
 	setContext('block-id', 'softmax');
 
-	const blockId = getContext('block-id');
+	const blockId = getContext('block-id') as string;
 
 	let isSoftmaxExpanded = false;
 	let showLogitPopover = false;
@@ -72,9 +72,10 @@
 		}
 	}
 	onMount(() => {
-		document.querySelector('.main-section').addEventListener('click', handleOutsideClick);
+		const mainSection = document.querySelector('.main-section');
+		mainSection?.addEventListener('click', handleOutsideClick);
 		return () => {
-			document.querySelector('.main-section').removeEventListener('click', handleOutsideClick);
+			mainSection?.removeEventListener('click', handleOutsideClick);
 		};
 	});
 
@@ -84,7 +85,7 @@
 	let drawBars: () => void;
 
 	// google analytics
-	let startTime = null;
+	let startTime: number | null = null;
 
 	const expandSoftmax = async () => {
 		containerState = Flip.getState('.softmax .softmax-detail.expandable');
@@ -114,14 +115,14 @@
 		window.dataLayer?.push({
 			event: 'visibility-show',
 			visible_name: 'prob-expansion',
-			start_time: startTime,
+			start_time: startTime ?? 0,
 			user_id: $userId
 		});
 	};
 
 	const collapseSoftmax = async () => {
 		let endTime = performance.now();
-		let visibleDuration = endTime - startTime;
+		let visibleDuration = endTime - (startTime ?? 0);
 
 		window.dataLayer?.push({
 			event: 'visibility-hide',
@@ -357,10 +358,10 @@
 											class:sample_highlight={$highlightedIndex === idx}
 											class:final_token_highlight={$predictedToken?.rank === idx}
 											class:cutoff={cutoffIndex === idx}
-											class:filtered={cutoffIndex >= idx}
-											class:zero={cutoffIndex < idx}
+											class:filtered={(cutoffIndex ?? -1) >= idx}
+											class:zero={(cutoffIndex ?? -1) < idx}
 										>
-											<span class="number" class:strike={cutoffIndex < idx}>{prob.toFixed(2)}</span>
+											<span class="number" class:strike={(cutoffIndex ?? -1) < idx}>{prob.toFixed(2)}</span>
 											{#if cutoffIndex === idx}
 												<span class="cutoff-label"
 													>sum={cumulativeProbabilities[idx]?.toFixed(2)}</span

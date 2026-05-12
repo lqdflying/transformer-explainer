@@ -14,7 +14,7 @@
 	export let goTo: string | undefined = undefined;
 	export let reference: PopoverProps['reference'] | undefined = undefined;
 
-	let startTime;
+	let startTime: number;
 	const onShow = (e) => {
 		startTime = e.timeStamp;
 		window.dataLayer?.push({

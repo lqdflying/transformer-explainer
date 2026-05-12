@@ -8,7 +8,7 @@
 	export let goTo: string | undefined = undefined;
 	export let textbook: string | undefined = undefined;
 
-	let startTime;
+	let startTime: number;
 	const onShow = (e) => {
 		startTime = e.timeStamp;
 		window.dataLayer?.push({

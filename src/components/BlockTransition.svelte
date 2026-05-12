@@ -27,8 +27,9 @@
 		}, timeout);
 	};
 
-	const animateForwardTransition = async ({ asyncTime } = {}) => {
+	const animateForwardTransition = async ({ asyncTime }: { asyncTime?: any } = {}) => {
 		const container = document.querySelector('.steps .blocks');
+		if (!container) return;
 		await tick();
 
 		isOnBlockTransition.set(true);
@@ -45,8 +46,9 @@
 		}, duration);
 	};
 
-	const animateBackwardTransition = async ({ asyncTime } = {}) => {
+	const animateBackwardTransition = async ({ asyncTime }: { asyncTime?: any } = {}) => {
 		const container = document.querySelector('.steps .blocks');
+		if (!container) return;
 		await tick();
 
 		isOnBlockTransition.set(true);
@@ -111,7 +113,7 @@
 	onMount(() => {
 		const setPosition = () => {
 			const scrollLeft = window.scrollX;
-			const topbarHeight = document.querySelector('.top-bar')?.offsetHeight;
+			const topbarHeight = (document.querySelector('.top-bar') as HTMLElement)?.offsetHeight;
 
 			const embedding = document.querySelector('.step.qkv .content .block-start-column');
 			const block =
@@ -139,7 +141,7 @@
 
 	const onClickNext = (e) => {
 		e.stopPropagation();
-		textPages.find((page) => page.id === 'blocks')?.complete();
+		textPages.find((page) => page.id === 'blocks')?.complete?.();
 
 		$blockIdxTemp = $blockIdxTemp < $modelMeta.layer_num - 1 ? $blockIdxTemp + 1 : 0;
 
@@ -152,7 +154,7 @@
 	};
 	const onClickPrev = (e) => {
 		e.stopPropagation();
-		textPages.find((page) => page.id === 'blocks')?.complete();
+		textPages.find((page) => page.id === 'blocks')?.complete?.();
 
 		$blockIdxTemp = $blockIdxTemp > 0 ? $blockIdxTemp - 1 : $modelMeta.layer_num - 1;
 

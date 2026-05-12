@@ -137,7 +137,9 @@
 			<div
 				class="progress-fill"
 				class:dragging={isDragging}
-				style="width: {isDragging ? previewProgress * 100 : (($textbookCurrentPage + 1) / textPages.length) * 100}%"
+				style="width: {isDragging
+					? previewProgress * 100
+					: (($textbookCurrentPage + 1) / textPages.length) * 100}%"
 			></div>
 		</div>
 		<div class="page-counter-container">

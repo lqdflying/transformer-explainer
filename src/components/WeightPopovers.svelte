@@ -33,10 +33,11 @@
 	}
 	// add global event
 	onMount(() => {
-		document.querySelector('.main-section').addEventListener('click', handleOutsideClick);
+		const mainSection = document.querySelector('.main-section');
+		mainSection?.addEventListener('click', handleOutsideClick);
 
 		return () => {
-			document.querySelector('.main-section').removeEventListener('click', handleOutsideClick);
+			mainSection?.removeEventListener('click', handleOutsideClick);
 		};
 	});
 
@@ -44,7 +45,7 @@
 	onMount(() => {
 		const setPosition = () => {
 			const scrollLeft = window.scrollX;
-			const topbarHeight = document.querySelector('.top-bar')?.offsetHeight;
+			const topbarHeight = (document.querySelector('.top-bar') as HTMLElement)?.offsetHeight;
 
 			const embedding = document.querySelector('.step.qkv .content');
 			const mlp = document.querySelector('.step.mlp .content');
@@ -66,8 +67,8 @@
 				top: attentionRect?.top + attentionRect?.height / 2 - topbarHeight
 			};
 			softmaxPos = {
-				left: softmaxRect?.left + scrollLeft,
-				top: softmaxRect?.top - topbarHeight
+				left: (softmaxRect?.left ?? 0) + scrollLeft,
+				top: (softmaxRect?.top ?? 0) - topbarHeight
 			};
 		};
 
@@ -80,7 +81,8 @@
 		elements.forEach((el) => resizeObserver.observe(el));
 
 		return () => {
-			document.querySelector('.main-section').removeEventListener('click', handleOutsideClick);
+			const mainSection = document.querySelector('.main-section');
+			mainSection?.removeEventListener('click', handleOutsideClick);
 		};
 	});
 

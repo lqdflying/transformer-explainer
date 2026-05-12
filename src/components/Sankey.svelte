@@ -28,7 +28,7 @@
 	const { theme } = resolveConfig(tailwindConfig);
 
 	let svgBackEl: HTMLOrSVGElement;
-	let svgEl: HTMLOrSVGElement;
+	let svgEl: SVGSVGElement;
 
 	let resizeObserver: ResizeObserver;
 	let screenWidth: number;
@@ -127,7 +127,7 @@
 			},
 			onMouseClick: (e, d) => {
 				e.stopPropagation();
-				textPages.find((page) => page.id === 'qkv')?.complete();
+				textPages.find((page) => page.id === 'qkv')?.complete?.();
 
 				if ($weightPopover === 'qkv') weightPopover.set(null);
 				else weightPopover.set('qkv');
@@ -254,7 +254,7 @@
 			},
 			onMouseClick: (e, d) => {
 				e.stopPropagation();
-				textPages.find((page) => page.id === 'output-concatenation')?.complete();
+				textPages.find((page) => page.id === 'output-concatenation')?.complete?.();
 
 				if ($weightPopover === 'attention') weightPopover.set(null);
 				else weightPopover.set('attention');
@@ -297,7 +297,7 @@
 			},
 			onMouseClick: (e, d) => {
 				e.stopPropagation();
-				textPages.find((page) => page.id === 'output-concatenation')?.complete();
+				textPages.find((page) => page.id === 'output-concatenation')?.complete?.();
 
 				if ($weightPopover === 'attention') weightPopover.set(null);
 				else weightPopover.set('attention');
@@ -478,7 +478,7 @@
 				},
 				onMouseClick: (e, d) => {
 					e.stopPropagation();
-					textPages.find((page) => page.id === 'output-logit')?.complete();
+					textPages.find((page) => page.id === 'output-logit')?.complete?.();
 
 					if ($weightPopover === 'softmax') weightPopover.set(null);
 					else weightPopover.set('softmax');
@@ -488,7 +488,7 @@
 	};
 
 	const createGradients = () => {
-		const svg = d3.select(svgEl);
+		const svg = d3.select(svgEl as Element);
 		const defs = svg.append('defs');
 
 		Object.keys(gradientMap).forEach((key) => {
@@ -538,7 +538,7 @@
 
 	const drawPath = async () => {
 		await tick();
-		const svg = d3.select(svgEl);
+		const svg = d3.select(svgEl as Element);
 		const svgBack = d3.select(svgBackEl);
 
 		[
@@ -672,14 +672,15 @@
 	}
 
 	const drawResidualPath = () => {
-		const svg = d3.select(svgEl);
+		const svg = d3.select(svgEl as Element);
 
 		const starts = d3.selectAll(`.residual-start path.head`).nodes();
 		const ends = d3.selectAll(`.residual-end path.head`).nodes();
 
 		const lineData = starts.map((start, i) => {
-			const startEl = start.getBoundingClientRect();
-			const endEl = ends[i].getBoundingClientRect();
+			if (!start || !ends[i]) return { x1: 0, y1: 0, x2: 0, y2: 0, id: '' };
+			const startEl = (start as Element).getBoundingClientRect();
+			const endEl = (ends[i] as Element).getBoundingClientRect();
 
 			const x1 = startEl.right;
 			const y1 = startEl.top;

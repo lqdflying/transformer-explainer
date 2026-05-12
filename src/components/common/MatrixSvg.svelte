@@ -42,7 +42,7 @@
 	export let highlightRow: number | undefined;
 	export let highlightCol: number | undefined;
 
-	let svgEl: HTMLOrSVGElement;
+	let svgEl: SVGSVGElement;
 
 	$: svgWidth =
 		groupBy === 'col'
@@ -57,7 +57,7 @@
 	const matrixColorScale =
 		typeof colorScale === 'function'
 			? colorScale
-			: d3.interpolate('white', theme.colors[colorKey][400]);
+			: d3.interpolate('white', (theme.colors as Record<string, any>)[colorKey][400]);
 
 	const drawMatrixSvg = () => {
 		const svg = d3.select(svgEl);
@@ -92,7 +92,7 @@
 					.attr('width', cellWidth)
 					.attr('height', cellHeight)
 					.attr('fill', function (d) {
-						return matrixColorScale(d.cell, d.colIndex);
+						return matrixColorScale(d.cell ?? 0, d.colIndex);
 					})
 					.on('mouseenter', onCellOver)
 					.on('mouseleave', onCellOut);
@@ -114,7 +114,7 @@
 					.attr('r', cellWidth / 2)
 					.attr('stroke', theme.colors.gray[500])
 					.attr('fill', function (d, i) {
-						return matrixColorScale(d.cell, i);
+						return matrixColorScale(d.cell ?? 0, i);
 					})
 					.on('mouseenter', onCellOver)
 					.on('mouseleave', onCellOut);
@@ -157,7 +157,7 @@
 					.on('mouseleave', onCellOut)
 					.attr('fill', function (d, i) {
 						if (!Number.isFinite(d.cell)) return theme.colors.gray[200];
-						return matrixColorScale(d.cell, i);
+						return matrixColorScale(d.cell ?? 0, i);
 					});
 			}
 			if (shape === 'circle') {
@@ -201,7 +201,7 @@
 					.duration(100)
 					.attr('fill', function (d, i) {
 						if (!Number.isFinite(d.cell)) return theme.colors.gray[200];
-						return matrixColorScale(d.cell, i);
+						return matrixColorScale(d.cell ?? 0, i);
 					});
 			}
 		}
@@ -245,16 +245,16 @@
 	let tooltipX = 0;
 	let tooltipY = 0;
 
-	function onCellOver(e, d) {
-		const el = this;
+	function onCellOver(e: any, d: any) {
+		const el = e.currentTarget as Element;
 		onMouseOverCell?.(e, d, el);
 
 		const tooltipData = showTooltip?.(e, d.cell);
 		if (tooltipData) visibleTooltip(e, tooltipData);
 	}
 
-	function onCellOut(e, d) {
-		const el = this;
+	function onCellOut(e: any, d: any) {
+		const el = e.currentTarget as Element;
 		onMouseOutCell?.(e, d, el);
 		hideTooltip();
 	}
@@ -268,8 +268,8 @@
 		tooltipData = data;
 		tooltipVisible = true;
 
-		const parentBbox = svgEl?.getBoundingClientRect();
-		const bbox = event.target.getBoundingClientRect();
+		const parentBbox = (svgEl as Element)?.getBoundingClientRect();
+		const bbox = (event.target as Element)?.getBoundingClientRect();
 
 		tooltipX = bbox.left + bbox.width / 2 - parentBbox.left;
 		tooltipY = bbox.top - parentBbox.top - 10;

@@ -37,11 +37,19 @@
 
 	$: predictedTokenTemp = $predictedToken?.token || '';
 
+	let suppressFocusMerge = false;
+
 	const wordLimit = 12;
 	$: exceedLimit = inputTextTemp.split(' ').length >= wordLimit;
 
 	// Text input
 	const onFocusInput = (e) => {
+		// Guard against duplicate calls (e.g., click on predicted token + focus event)
+		if (suppressFocusMerge) {
+			suppressFocusMerge = false;
+			return;
+		}
+		if (!predictedTokenTemp) return;
 		let formattedString = (inputTextTemp + predictedTokenTemp).replace(/[\s\n]+/g, ' ');
 
 		inputTextTemp = formattedString;
@@ -63,7 +71,7 @@
 
 		setTimeout(() => {
 			onFocusInput();
-			textPages.find((page) => page.id === 'how-transformers-work')?.complete();
+			textPages.find((page) => page.id === 'how-transformers-work')?.complete?.();
 
 			inputText.set(inputTextTemp);
 
@@ -99,7 +107,7 @@
 	let dropdownOpen = false;
 	const onSelectExample = (d, i) => {
 		if ($isFetchingModel) {
-			textPages.find((page) => page.id === 'how-transformers-work')?.complete();
+			textPages.find((page) => page.id === 'how-transformers-work')?.complete?.();
 		}
 
 		dropdownOpen = false;
@@ -121,6 +129,7 @@
 	const moveCursorToEnd = (element) => {
 		const range = document.createRange();
 		const sel = window.getSelection();
+		if (!sel) return;
 		range.selectNodeContents(element);
 		range.collapse(false);
 		sel.removeAllRanges();
@@ -129,10 +138,7 @@
 	};
 
 	$: isLoading = $isFetchingModel || $isModelRunning;
-	$: disabled =
-		$isModelRunning ||
-		$expandedBlock.id !== null ||
-		!!$weightPopover;
+	$: disabled = $isModelRunning || $expandedBlock.id !== null || !!$weightPopover;
 	$: selectDisabled = $isModelRunning || $expandedBlock.id !== null || !!$weightPopover;
 	$: parameterDisabled = !!$weightPopover;
 </script>
@@ -199,6 +205,8 @@
 							on:click={(e) => {
 								e.stopPropagation();
 								onFocusInput(e);
+								// Suppress the focus event merge since we already merged above
+								suppressFocusMerge = true;
 								inputRef.focus();
 								moveCursorToEnd(inputRef);
 							}}

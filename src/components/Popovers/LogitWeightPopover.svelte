@@ -64,7 +64,7 @@
 	// animation
 	let isAnimationActive = false;
 	let progress = 0;
-	let timeline;
+	let timeline: gsap.core.Timeline;
 
 	onMount(() => {
 		timeline = gsap.timeline();
@@ -322,7 +322,7 @@
 		<div class="matrix flex flex-col items-center">
 			<div class="title flex items-center gap-1">
 				<span>Output<br />Embedding</span>
-				<HelpPopover id="hidden-states" 
+				<HelpPopover id="hidden-states"
 					>{`After passing through all blocks, \nthe final token's embedding vector \ncontains all the contextual information \nfrom the preceding tokens.`}</HelpPopover
 				>
 			</div>
@@ -342,7 +342,7 @@
 		<div class="matrix flex flex-col items-center">
 			<div class="title flex items-center gap-1">
 				Output Projection Weights
-				<HelpPopover id="lm-head-weights" 
+				<HelpPopover id="lm-head-weights"
 					>{`Transforms the final embedding into a vocabulary distribution.\nParameters were learned in training, fixed in prediction.`}</HelpPopover
 				>
 			</div>
@@ -365,7 +365,7 @@
 		<div class="operator"><div class="symbol plus">+</div></div>
 		<div class="matrix flex flex-col items-center">
 			<div class="title flex items-center gap-1">
-				Output Projection Bias<HelpPopover id="lm-head-bias" 
+				Output Projection Bias<HelpPopover id="lm-head-bias"
 					>{`Offsets added after the transformation.\nParameters were learned in training, fixed in prediction.`}</HelpPopover
 				>
 			</div>
@@ -386,7 +386,7 @@
 		<div class="matrix flex flex-col items-center">
 			<div class="title flex items-center gap-1">
 				Logits
-				<HelpPopover id="logits" 
+				<HelpPopover id="logits"
 					>{`Raw scores representing the model’s preference \nfor each vocabulary token before applying softmax.`}</HelpPopover
 				>
 			</div>

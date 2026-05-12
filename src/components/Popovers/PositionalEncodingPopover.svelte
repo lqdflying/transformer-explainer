@@ -21,7 +21,7 @@
 
 	let numBarcodeLines = 21;
 
-	function computePositionalEncodings(numPositions, fullEmbeddingDim, visualEmbeddingDim) {
+	function computePositionalEncodings(numPositions: number, fullEmbeddingDim: number, visualEmbeddingDim: number) {
 		const posEncodings = Array(visualEmbeddingDim)
 			.fill()
 			.map(() => Array(numPositions).fill(0));
@@ -39,19 +39,19 @@
 		return posEncodings;
 	}
 
-	let posEncodings = [];
-	const hoveredRow = writable(null);
-	const hoveredCol = writable(null);
+	let posEncodings: number[][] = [];
+	const hoveredRow = writable<number | null>(null);
+	const hoveredCol = writable<number | null>(null);
 
 	// Create a linear color scale
 	const colorScale = d3
 		.scaleLinear()
 		.domain([-1, 0, 1])
-		.range(['rgb(248, 113, 113)', 'rgb(255, 255, 255)', 'rgb(96, 165, 250)'])
-		.interpolate(d3.interpolateRgb);
+		.range(['rgb(248, 113, 113)', 'rgb(255, 255, 255)', 'rgb(96, 165, 250)'] as any)
+		.interpolate(d3.interpolateRgb as any);
 
 	// Function to get the gradient color using D3
-	function getGradientColor(value) {
+	function getGradientColor(value: number) {
 		return colorScale(value);
 	}
 

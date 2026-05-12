@@ -55,7 +55,7 @@
 
 	const qkvColorScale = (d, i) => {
 		let color = i < visibleDimension ? 'blue' : i < visibleDimension * 2 ? 'red' : 'green';
-		return d3.interpolate(theme.colors[color][100], theme.colors[color][400])(d);
+		return d3.interpolate((theme.colors as Record<string, any>)[color][100], (theme.colors as Record<string, any>)[color][400])(d);
 	};
 
 	// animation
@@ -78,7 +78,7 @@
 	onDestroy(() => {
 		if (timeline) {
 			timeline.kill();
-			timeline = null;
+			timeline = null as any;
 		}
 	});
 
@@ -319,7 +319,7 @@
 		</div>
 		<div class="matrix flex flex-col items-center">
 			<div class="title flex items-center gap-1 self-end">
-				Embeddings<HelpPopover id="qkv-emgeddings" 
+				Embeddings<HelpPopover id="qkv-emgeddings"
 					>{`Embeddings originate from tokens \nbut evolve through blocks, becoming \nabstract representations.`}</HelpPopover
 				>
 			</div>
@@ -339,7 +339,7 @@
 		<div class="operator"><div class="symbol mul">&times;</div></div>
 		<div class="matrix flex flex-col items-center">
 			<div class="title flex items-center gap-1">
-				Q·K·V Weights<HelpPopover id="qkv-weights" 
+				Q·K·V Weights<HelpPopover id="qkv-weights"
 					>{`Transforms embedding vectors into Query, Key, and Value vectors. \nParameters were learned in training, fixed in prediction.`}</HelpPopover
 				>
 			</div>
@@ -362,7 +362,7 @@
 		<div class="operator"><div class="symbol plus">+</div></div>
 		<div class="matrix flex flex-col items-center">
 			<div class="title flex items-center gap-1">
-				Q·K·V Bias<HelpPopover id="qkv-bias" 
+				Q·K·V Bias<HelpPopover id="qkv-bias"
 					>{`Offsets added after transformation. \nParameters that learned in training, fixed in prediction.`}</HelpPopover
 				>
 			</div>

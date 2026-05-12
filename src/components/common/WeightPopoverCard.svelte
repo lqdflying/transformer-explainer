@@ -11,7 +11,7 @@
 	export let timeline;
 	export let isOpen: boolean = true;
 
-	let startTime;
+	let startTime: number;
 
 	onMount(() => {
 		startTime = performance.now();

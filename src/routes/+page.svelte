@@ -117,7 +117,7 @@
 	// Subscribe inputs
 	const cachedDataMap = [ex0, ex1, ex2, ex3, ex4];
 	const subscribeInputs = (tokenizer: PreTrainedTokenizer) => {
-		const runModelOrCache = () => {
+		const runModelOrCache = (input: string) => {
 			if (!$modelSession) {
 				const cachedData = cachedDataMap[$selectedExampleIdx];
 
@@ -132,14 +132,14 @@
 			// run model when input has changed
 			runModel({
 				tokenizer,
-				input: $inputText.trim(),
+				input: input.trim(),
 				temperature: $temperature,
 				sampling: $sampling
 			});
 		};
 
 		const unsubscribeInputText = inputText.subscribe((value) => {
-			runModelOrCache();
+			runModelOrCache(value);
 		});
 
 		let initialTemperature = true; // prevent initial redundant rendering
